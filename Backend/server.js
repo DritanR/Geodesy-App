@@ -1,7 +1,8 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const { scryRenderedDOMComponentsWithTag } = require('react-dom/test-utils');
 
 mongoose.connect('mongodb+srv://GeodezyApp:GeodezyApp1234@cluster0.krvd4ee.mongodb.net/?retryWrites=true&w=majority', {
     useNewUrlParser: true,
@@ -44,24 +45,45 @@ app.post('/add/client', async (req, res) => {
 })
 
 app.get('/search/:name', async (req, res) => {
-    let data = await NameModel.find({
-        name: { $regex: req.params.name, $options: 'i' }
-    });
-    res.send(data);
+    try {
+        const name = req.params.name.toLowerCase();
+        const data = await NameModel.find({
+            name: { $regex: name, $options: 'i' }
+        });
+
+        const ids = data.map(item => item.id);
+
+        res.json({ data, ids });
+    } catch (error) {
+        res.status(500).json({ message: 'An error occurred' });
+    }
 });
 
 
-app.get('/get/client/:name', async (req, res) => {
-    const name = req.params.name
-    try {
-        const client = await NameModel.find({ name })
 
-        if (!client || client.length === 0) {
-            return res.status(404).json({ error: 'Client not found' })
+app.get('/get/client', async (req, res) => {
+    const { name, id } = req.query;
+
+    try {
+        let query = {}
+
+        if (name) {
+            query.name = { $regex: new RegExp(name, 'i') }
         }
-        return res.status(200).json(client)
-    } catch (err) {
-        return res.status(500).json({ error: 'Server error' })
+
+        if (id) {
+            query.id = id
+        }
+
+        const clients = await NameModel.find(query)
+
+        if (!clients || clients.length < 1) {
+            return res.status(404).json({ message: 'This client does not exist!' })
+        }
+
+        res.json(clients);
+    } catch (error) {
+        res.status(500).json({ message: 'An error occurred' })
     }
 })
 
@@ -74,6 +96,19 @@ app.delete('/delete/client/:id', async (req, res) => {
         res.status(500).json({ message: 'An error occurred' })
     }
 })
+
+
+app.put('/update/client/:id', async (req, res) => {
+    const clientId = req.params.id;
+    const updatedData = req.body;
+  
+    try {
+      await NameModel.findByIdAndUpdate(clientId, updatedData);
+      res.json({ message: 'Client data updated successfully!' });
+    } catch (error) {
+      res.status(500).json({ message: 'An error occurred while updating client data.' });
+    }
+  });
 
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
