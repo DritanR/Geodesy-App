@@ -3,8 +3,18 @@ import '../styling/pages-styling/SearchingNumber.css'
 const SearchingNumber = ({id, setId}) => {
 
     function handleId (event) {
-        setId(event.target.value)
+        const inputNumber = event.target.value
+
+        const onlyNumbers = inputNumber.replace(/[^0-9]/g, '')
+        setId(onlyNumbers)
     }
+
+    const handleKeyDown = (event) => {
+        if (event.key === '-' || event.key === '+') {
+          event.preventDefault();
+        }
+      };
+
 
     return (
         <div className="searching-number">
@@ -14,6 +24,7 @@ const SearchingNumber = ({id, setId}) => {
                 placeholder='id'
                 value={id}
                 onChange={handleId}
+                onKeyDown={handleKeyDown}
                 />
             </div>
         </div>

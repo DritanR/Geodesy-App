@@ -1,22 +1,21 @@
 import '../styling/pages-styling/PhoneNumber.css'
-import PhoneInput from "react-phone-number-input";
 
-const PhoneNumber = ({phoneNumber, setPhoneNumber}) => {
+const PhoneNumber = ({telefonskiBroj, setTelefonskiBroj}) => {
 
-    function handlePhoneNumber (value) {
-        setPhoneNumber(value);
+    function handlePhoneNumber (e) {
+        setTelefonskiBroj(e.target.value);
     }
 
 
     return (
         <div className="phone-number">
             <div className='phone-number-container'>
-            <PhoneInput style={{height: '40px', width: '40px'}}
-           international
-           defaultCountry="MK"
-           value={phoneNumber}
-           onChange={handlePhoneNumber}
-            />
+                <input 
+                type='number'
+                value={telefonskiBroj}
+                onChange={handlePhoneNumber}
+                placeholder='Telefonski broj'
+                />
             </div>
         </div>
     );

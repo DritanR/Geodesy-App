@@ -1,9 +1,9 @@
 import '../styling/pages-styling/VidNaUsloga.css'
 
-const VidNaUsloga = ({ vid, setVid }) => {
+const VidNaUsloga = ({ vidNaUsloga, setVidNaUsloga }) => {
 
     function handleVid(event) {
-        setVid(event.target.value);
+        setVidNaUsloga(event.target.value);
     }
 
     return (
@@ -12,7 +12,7 @@ const VidNaUsloga = ({ vid, setVid }) => {
                 <input
                     type="text"
                     placeholder="Vid Na Usloga"
-                    value={vid}
+                    value={vidNaUsloga}
                     onChange={handleVid}
                 />
             </div>

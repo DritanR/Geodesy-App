@@ -12,6 +12,7 @@ import KO from './components/pages/KO';
 import Broj from './components/pages/Broj';
 import KP from './components/pages/KP';
 import Search from './components/pages/Search';
+import All from './components/pages/All';
 
 function App() {
 
@@ -20,17 +21,14 @@ function App() {
   const [logOut, setLogOut] = useState(false)
 
   /* Routes Data */
-
-  const [name, setName] = useState('')
-  const [broj, setBroj] = useState('')
-  const [id, setId] = useState(0)
-  const [phoneNumber, setPhoneNumber] = useState()
-  const [city, setCity] = useState('')
-  const [province, setProvince] = useState('')
-  const [streetAdress, setStreetAdress] = useState('')
-  const [postalCode, setPostalCode] = useState('')
+  const [client, setClient] = useState([]);
+  const [imeIPrezime, setImeIPrezime] = useState('')
+  const [brojNaBaranje, setBrojNaBaranje] = useState('')
+  const [id, setId] = useState('')
+  const [telefonskiBroj, setTelefonskiBroj] = useState()
+  const [adresa, setAdresa] = useState('')
   const [date, setDate] = useState('')
-  const [vid, setVid] = useState('')
+  const [vidNaUsloga, setVidNaUsloga] = useState('')
   const [ko, setKo] = useState('')
   const [kp, setKp] = useState('')
 
@@ -40,16 +38,17 @@ function App() {
         <Lock lockPass={lockPass} lockValue={lockValue} setLockValue={setLockValue} />
       ) : (
         <>
-          <Navbar setLogOut={setLogOut} setLockValue={setLockValue} name={name} setName={setName} setId={setId} date={date} setDate={setDate} phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} city={city} setCity={setCity} province={province} setProvince={setProvince} setStreetAdress={setStreetAdress} streetAdress={streetAdress} postalCode={postalCode} setPostalCode={setPostalCode} vid={vid} setVid={setVid} ko={ko} setKo={setKo} broj={broj} setBroj={setBroj} kp={kp} setKp={setKp} id={id} />
+          <Navbar setLogOut={setLogOut} setLockValue={setLockValue} imeIPrezime={imeIPrezime} setImeIPrezime={setImeIPrezime} setId={setId} date={date} setDate={setDate} telefonskiBroj={telefonskiBroj} setTelefonskiBroj={setTelefonskiBroj} adresa={adresa} setAdresa={setAdresa} vidNaUsloga={vidNaUsloga} setVidNaUsloga={setVidNaUsloga} ko={ko} setKo={setKo} brojNaBaranje={brojNaBaranje} setBrojNaBaranje={setBrojNaBaranje} kp={kp} setKp={setKp} id={id} client={client} setClient={setClient} />
           <Routes>
-            <Route index element={<Search />} />
-            <Route path='/broj' element={<Broj broj={broj} setBroj={setBroj} />} />
+            <Route path='/all' element={<All client={client} setClient={setClient} />} />
+            <Route path='/search' element={<Search client={client} setClient={setClient} />} />
+            <Route path='/broj' element={<Broj brojNaBaranje={brojNaBaranje} setBrojNaBaranje={setBrojNaBaranje} />} />
             <Route path='/broj-na-baranje' element={<SearchingNumber id={id} setId={setId} />} />
-            <Route path='/telefonski-broj' element={<PhoneNumber phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} />} />
-            <Route path='/ime-i-prezime' element={<NameLastName name={name} setName={setName}/>} />
-            <Route path='/adresa' element={<Adress city={city} setCity={setCity} province={province} setProvince={setProvince} streetAdress={streetAdress} setStreetAdress={setStreetAdress} postalCode={postalCode} setPostalCode={setPostalCode} />} />
+            <Route path='/telefonski-broj' element={<PhoneNumber telefonskiBroj={telefonskiBroj} setTelefonskiBroj={setTelefonskiBroj} />} />
+            <Route path='/ime-i-prezime' element={<NameLastName imeIPrezime={imeIPrezime} setImeIPrezime={setImeIPrezime}/>} />
+            <Route path='/adresa' element={<Adress adresa={adresa} setAdresa={setAdresa} />} />
             <Route path='/data' element={<Date date={date} setDate={setDate} />} />
-            <Route path='/vid-na-usloga' element={<VidNaUsloga vid={vid} setVid={setVid} />} />
+            <Route path='/vid-na-usloga' element={<VidNaUsloga vidNaUsloga={vidNaUsloga} setVidNaUsloga={setVidNaUsloga} />} />
             <Route path='/ko' element={<KO ko={ko} setKo={setKo} />} />
             <Route path='/kp' element={<KP kp={kp} setKp={setKp} />} />
           </Routes>

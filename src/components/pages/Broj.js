@@ -1,9 +1,9 @@
 import '../styling/pages-styling/Broj.css'
 
-const Broj = ({broj, setBroj}) => {
+const Broj = ({brojNaBaranje, setBrojNaBaranje}) => {
 
     function handleBroj (event) {
-        setBroj(event.target.value)
+        setBrojNaBaranje(event.target.value)
     }
 
     return (
@@ -11,7 +11,7 @@ const Broj = ({broj, setBroj}) => {
             <div className="broj-container">
                 <input
                 type="text"
-                value={broj}
+                value={brojNaBaranje}
                 onChange={handleBroj}
                 placeholder="Broj"
                 />

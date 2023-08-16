@@ -1,9 +1,15 @@
 import '../styling/pages-styling/NameLastName.css'
 
-const NameLastName = ({name, setName}) => {
+const NameLastName = ({imeIPrezime, setImeIPrezime}) => {
 
     function handleName (event) {
-        setName(event.target.value)
+        const value = event.target.value
+
+        const onlyLetters = /^[A-Za-z\s]+$/;
+
+        if (value === '' || onlyLetters.test(value)) {
+            setImeIPrezime(value)
+        }
     }
 
     return (
@@ -11,7 +17,7 @@ const NameLastName = ({name, setName}) => {
             <div className='nl-container'>
                 <input className='nl-name-input nl-input'
                     type='text'
-                    value={name}
+                    value={imeIPrezime}
                     onChange={handleName}
                     placeholder='Name and Last Name'
                 />

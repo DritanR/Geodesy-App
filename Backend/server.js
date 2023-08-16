@@ -11,14 +11,11 @@ mongoose.connect('mongodb+srv://GeodezyApp:GeodezyApp1234@cluster0.krvd4ee.mongo
 
 const NameSchema = new mongoose.Schema({
     id: Number,
-    broj: String,
-    name: String,
-    city: String,
-    province: String,
-    streetAdress: String,
-    postalCode: Number,
-    phoneNumber: String,
-    vid: String,
+    brojNaBaranje: String,
+    imeIPrezime: String,
+    adresa: String,
+    telefonskiBroj: String,
+    vidNaUsloga: String,
     ko: String,
     kp: String,
     date: String
@@ -32,10 +29,17 @@ app.use(cors())
 app.use(bodyParser.json())
 
 app.post('/add/client', async (req, res) => {
-    const { id, broj, name, city, province, streetAdress, postalCode, phoneNumber, vid, ko, kp, date } = req.body
+    const { id, brojNaBaranje, imeIPrezime, adresa, telefonskiBroj, vidNaUsloga, ko, kp, date } = req.body
 
     try {
-        const newClient = new NameModel({ id, broj, name, city, province, streetAdress, postalCode, phoneNumber, vid, ko, kp, date })
+
+        const existingClient = await NameModel.findOne({ id })
+
+        if (existingClient) {
+            return res.status(400).json({ message: 'Client with this ID alredy exists!' })
+        }
+
+        const newClient = new NameModel({ id, brojNaBaranje, imeIPrezime, adresa, telefonskiBroj, vidNaUsloga, ko, kp, date })
         await newClient.save()
 
         res.status(201).json({ message: 'Client data saved sucessfully!' })
@@ -110,5 +114,21 @@ app.put('/update/client/:id', async (req, res) => {
     }
   });
 
+
+  app.post('/clearValue/:clientId', async (req, res) => {
+    const { clientId } = req.params;
+    const { field } = req.body;
+  
+    try {
+      const updateObj = {};
+      updateObj[field] = '';
+  
+      await NameModel.findByIdAndUpdate(clientId, { $set: updateObj });
+      res.json({ message: `Value for field ${field} cleared successfully for client ${clientId}` });
+    } catch (error) {
+      console.error('Error clearing value:', error);
+      res.status(500).json({ error: 'An error occurred' });
+    }
+  });
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

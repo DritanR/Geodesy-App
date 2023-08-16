@@ -3,6 +3,10 @@
     align-items: center;
     justify-content: space-evenly;
 }
-.navbar-container-left, .navbar-container-right {
+.add-clients-container, .navbar-container-right, .navbar-container-left {
     display: flex;
+}
+.navbar-container-center {
+    display: flex;
+    flex-direction: column;
 }
