@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import SearchBar from '../SearchBar';
 import '../styling/pages-styling/Search.css';
 
-const Search = ({client, setClient}) => {
+
+const Search = ({ client, setClient }) => {
     const [showSearchResults, setShowSearchResults] = useState(true);
     const [error, setError] = useState(null);
     const [searchResults, setSearchResults] = useState([]);
@@ -21,9 +22,15 @@ const Search = ({client, setClient}) => {
         vidNaUsloga: '',
         ko: '',
         kp: '',
-        date: ''
+        date: '',
+        files: [{
+            filename: String,
+            originalName: String,
+            // You can add more fields like fileType, fileSize, filePath, etc. as needed
+        }],
     });
     const [updateMsg, setUpdateMsg] = useState(null)
+    const fileInputRef = useRef(null);
 
     const handleSearch = async (query) => {
         try {
@@ -51,6 +58,10 @@ const Search = ({client, setClient}) => {
                 setEnterIdMsg(null);
                 setSearchQuery('');
                 setIdQuery('');
+
+                if (response.data.length > 0) {
+                    fetchClientFiles(response.data[0]._id); // Assuming you want to fetch files for the first matching client
+                }
             } catch (error) {
                 if (error.response && error.response.status === 404) {
                     setError('This client does not exist!');
@@ -61,11 +72,13 @@ const Search = ({client, setClient}) => {
                     setEnterIdMsg(null)
                 }
                 setClient([]);
+                setClientFiles([]);
             }
         } else {
             setShowSearchResults(false);
             setError(null);
             setEnterIdMsg('Please enter an ID');
+            setClientFiles([]);
         }
     };
 
@@ -101,22 +114,22 @@ const Search = ({client, setClient}) => {
     };
 
     const handleUpdateClient = async (id, updatedData) => {
-        if ( (updatedData.id !== '' && updatedData.id !== undefined) && updatedData.imeIPrezime !== '') {
+        if ((updatedData.id !== '' && updatedData.id !== undefined) && updatedData.imeIPrezime !== '') {
             try {
                 await axios.put(`http://localhost:5000/update/client/${id}`, updatedData);
                 setEditingClients((prevEditingClients) =>
                     prevEditingClients.filter((clientId) => clientId !== id)
                 );
-    
+
                 setClient((prevClients) =>
-                prevClients.map((person) => {
-                    if (person._id === id) {
-                        return { ...person, ...updatedData };
-                    }
-                    return person;
-                })
-            );
-            setUpdateMsg(null)
+                    prevClients.map((person) => {
+                        if (person._id === id) {
+                            return { ...person, ...updatedData };
+                        }
+                        return person;
+                    })
+                );
+                setUpdateMsg(null)
             } catch (error) {
                 console.error('Error updating client:', error);
                 setUpdateMsg(null)
@@ -138,22 +151,65 @@ const Search = ({client, setClient}) => {
     };
     const clearValue = (clientId, field) => {
         axios.post(`http://localhost:5000/clearValue/${clientId}`, { field: field })
-          .then(response => {
-            console.log(`Value for field ${field} cleared successfully for client ${clientId}`);
-            setClient(prevClients => {
-              return prevClients.map(person => {
-                if (person._id === clientId) {
-                  return { ...person, [field]: '' };
-                }
-                return person;
-              });
+            .then(response => {
+                console.log(`Value for field ${field} cleared successfully for client ${clientId}`);
+                setClient(prevClients => {
+                    return prevClients.map(person => {
+                        if (person._id === clientId) {
+                            return { ...person, [field]: '' };
+                        }
+                        return person;
+                    });
+                });
+            })
+            .catch(error => {
+                console.error('Error clearing value:', error);
             });
-          })
-          .catch(error => {
-            console.error('Error clearing value:', error);
-          });
-      };
-      
+    };
+
+    const handleFileUpload = async (clientId, files) => {
+        try {
+            const formData = new FormData();
+
+            for (const file of files) {
+                formData.append('files', file);
+            }
+
+            await axios.post(`http://localhost:5000/upload/${clientId}`, formData);
+
+            fetchClientFiles(clientId);
+            if (fileInputRef.current) {
+                fileInputRef.current.value = ''; // Reset the input's value
+            }
+            console.log('File added successfully!')
+        } catch (error) {
+            console.error('Error uploading files:', error);
+        }
+    };
+
+    const [clientFiles, setClientFiles] = useState([]);
+
+    const fetchClientFiles = async (clientId) => {
+        try {
+            const response = await axios.get(`http://localhost:5000/get/files/${clientId}`);
+            setClientFiles(response.data.files);
+        } catch (error) {
+            console.error('Error fetching client files:', error);
+        }
+    };
+
+    const handleDeleteFile = async (clientId, filename) => {
+        try {
+            await axios.delete(`http://localhost:5000/delete/file/${clientId}/${filename}`);
+            console.log('File deleted successfully!');
+    
+            // Remove the deleted file from clientFiles state
+            setClientFiles(prevFiles => prevFiles.filter(file => file.filename !== filename));
+        } catch (error) {
+            console.error('Error deleting file:', error);
+        }
+    };
+    
 
     return (
         <div className="search">
@@ -243,6 +299,28 @@ const Search = ({client, setClient}) => {
                                     <p className='client-data'>{person.ko !== '' && 'KO: ' + person.ko}</p>
                                     <p className='client-data'>{person.kp !== '' && 'KP: ' + person.kp}</p>
                                     <p className='client-data'>{(person.date !== undefined && person.date !== '') && 'Data: ' + person.date}</p>
+                                    {clientFiles.length > 0 && (
+                                        <div className="file-list">
+                                            <h3>Files:</h3>
+                                            <ul>
+                                                {clientFiles.map((file, index) => (
+                                                    <li key={index}>
+                                                        <a href={`http://localhost:5000/uploads/${file.filename}`} target="_blank" rel="noopener noreferrer">
+                                                            {file.originalName}
+                                                        </a>
+                                                        <button onClick={() => handleDeleteFile(person._id, file.filename)}>Delete</button>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+
+                                    <input
+                                        type="file"
+                                        onChange={(e) => handleFileUpload(person._id, e.target.files)}
+                                        multiple
+                                        ref={fileInputRef}
+                                    />
                                     <br></br>
                                 </>
                             )}
@@ -253,5 +331,4 @@ const Search = ({client, setClient}) => {
         </div>
     );
 };
-
 export default Search;

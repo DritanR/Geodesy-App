@@ -42,6 +42,10 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
         setAddMessage(null)
     }
 
+    function resetClient () {
+        setClient([])
+    }
+
     const handleAddClient = async () => {
         if ((id === '' || id === undefined) && imeIPrezime === '') {
             setAddMessage('Please fill the empty ID and Name field to add a client!')
@@ -78,6 +82,7 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
 
     const fetchClientData = async () => {
         try {
+            resetData()
             const response = await axios.get('http://localhost:5000/get/client');
             setClient(response.data);
         } catch (error) {
@@ -90,7 +95,7 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
 
             <div className='navbar-container-left'>
                 <button className='log-out-button' onClick={handleLogOut}>Log Out</button>
-                <Link to='/search'><NavbarElement name='Search' /></Link>
+                <Link to='/search'><button className='search-button' onClick={resetClient}><NavbarElement name='Search' /></button></Link>
                 <Link to ='/all'><button className='all-button' onClick={fetchClientData}>All</button></Link>
             </div>
 

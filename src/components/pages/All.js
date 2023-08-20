@@ -1,7 +1,105 @@
 import React from 'react'
-import Search from './Search'
+import { useState } from 'react';
+import axios from 'axios';
 
 export default function All({client, setClient}) {
+
+    const [editingClients, setEditingClients] = useState([]);
+    const [updatedData, setUpdatedData] = useState({
+        id: '',
+        brojNaBaranje: '',
+        imeIPrezime: '',
+        adresa: '',
+        telefonskiBroj: '',
+        vidNaUsloga: '',
+        ko: '',
+        kp: '',
+        date: ''
+    });
+    const [updateMsg, setUpdateMsg] = useState(null)
+
+    const handleUpdateClient = async (id, updatedData) => {
+        if ( (updatedData.id !== '' && updatedData.id !== undefined) && updatedData.imeIPrezime !== '') {
+            try {
+                await axios.put(`http://localhost:5000/update/client/${id}`, updatedData);
+                setEditingClients((prevEditingClients) =>
+                    prevEditingClients.filter((clientId) => clientId !== id)
+                );
+    
+                setClient((prevClients) =>
+                prevClients.map((person) => {
+                    if (person._id === id) {
+                        return { ...person, ...updatedData };
+                    }
+                    return person;
+                })
+            );
+            setUpdateMsg(null)
+            } catch (error) {
+                console.error('Error updating client:', error);
+                setUpdateMsg(null)
+            }
+        } else if ((updatedData.id === '' || updatedData.id === undefined) && updatedData.imeIPrezime !== '') {
+            setUpdateMsg('Please fill the empty ID field to update client data!')
+        } else if ((updatedData.id !== '' && updatedData.id !== undefined) && updatedData.imeIPrezime === '') {
+            setUpdateMsg('Please fill the empty Name field to update client data!')
+        } else {
+            setUpdateMsg('Please fill the empty ID and Name field to update client data!')
+        }
+    };
+
+    const handleCancelEdit = (id) => {
+        setUpdateMsg(null)
+        setEditingClients((prevEditingClients) =>
+            prevEditingClients.filter((clientId) => clientId !== id)
+        );
+    };
+
+    const handleEditClient = (id) => {
+        const clientToEdit = client.find(person => person._id === id);
+
+        setEditingClients((prevEditingClients) => [...prevEditingClients, id]);
+        setUpdatedData({
+            id: clientToEdit.id,
+            brojNaBaranje: clientToEdit.brojNaBaranje,
+            imeIPrezime: clientToEdit.imeIPrezime,
+            adresa: clientToEdit.adresa,
+            telefonskiBroj: clientToEdit.telefonskiBroj,
+            vidNaUsloga: clientToEdit.vidNaUsloga,
+            ko: clientToEdit.ko,
+            kp: clientToEdit.kp,
+            date: clientToEdit.date,
+        });
+    };
+
+    const deleteClient = async (id) => {
+        try {
+            await axios.delete(`http://localhost:5000/delete/client/${id}`);
+            setClient((prevClients) => prevClients.filter((person) => person._id !== id));
+        } catch (error) {
+            console.error('Error deleting client:', error);
+        }
+    };
+
+    const clearValue = (clientId, field) => {
+        axios.post(`http://localhost:5000/clearValue/${clientId}`, { field: field })
+          .then(response => {
+            console.log(`Value for field ${field} cleared successfully for client ${clientId}`);
+            setClient(prevClients => {
+              return prevClients.map(person => {
+                if (person._id === clientId) {
+                  return { ...person, [field]: '' };
+                }
+                return person;
+              });
+            });
+          })
+          .catch(error => {
+            console.error('Error clearing value:', error);
+          });
+      };
+      
+
   return (
     <div className='all'>
         {client.length > 0 &&
