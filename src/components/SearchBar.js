@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './styling/SearchBar.css'
 
-const SearchBar = ({ idQueryList, onSearch, searchQuery, setSearchQuery, searchClient, idQuery, setIdQuery, showSearchResults, setShowSearchResults, searchResults, handleResultClick }) => {
+const SearchBar = ({ idQueryList, onSearch, searchQuery, setSearchQuery, searchClient, idQuery, setIdQuery, showSearchResults, setShowSearchResults, searchResults, handleResultClick, deleteMessage, dltItem }) => {
 
     const handleInputChange = (e) => {
         const query = e.target.value;
@@ -48,6 +48,8 @@ const SearchBar = ({ idQueryList, onSearch, searchQuery, setSearchQuery, searchC
             </div>
 
             <button className='search-button' onClick={searchClient}>Search</button>
+            {deleteMessage}
+            {dltItem}
         </div>
     );
 };

@@ -101,7 +101,7 @@ app.delete('/delete/client/:id', async (req, res) => {
     try {
         const id = req.params.id
         await NameModel.findByIdAndDelete(id)
-        res.json({ message: 'Item deleted successfully!' })
+        res.json({ message: 'Client deleted successfully!' })
     } catch (error) {
         res.status(500).json({ message: 'An error occurred' })
     }

@@ -12,16 +12,17 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
     const [showModal, setShowModal] = useState(false)
 
     useEffect(() => {
-        if (addedMessage) {
+        if (addedMessage || addMessage) {
             const timeout = setTimeout(() => {
                 setAddedMessage(null);
+                setAddMessage(null)
             }, 3000);
 
             return () => {
                 clearTimeout(timeout);
             };
         }
-    }, [addedMessage]);
+    }, [addedMessage, addMessage]);
 
     function handleLogOut() {
         setLogOut(true)
