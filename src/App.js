@@ -13,6 +13,7 @@ import Broj from './components/pages/Broj';
 import KP from './components/pages/KP';
 import Search from './components/pages/Search';
 import All from './components/pages/All';
+import Home from './components/pages/Home';
 
 function App() {
 
@@ -40,6 +41,7 @@ function App() {
         <>
           <Navbar setLogOut={setLogOut} setLockValue={setLockValue} imeIPrezime={imeIPrezime} setImeIPrezime={setImeIPrezime} setId={setId} date={date} setDate={setDate} telefonskiBroj={telefonskiBroj} setTelefonskiBroj={setTelefonskiBroj} adresa={adresa} setAdresa={setAdresa} vidNaUsloga={vidNaUsloga} setVidNaUsloga={setVidNaUsloga} ko={ko} setKo={setKo} brojNaBaranje={brojNaBaranje} setBrojNaBaranje={setBrojNaBaranje} kp={kp} setKp={setKp} id={id} client={client} setClient={setClient} />
           <Routes>
+            <Route index element={<Home />} />
             <Route path='/all' element={<All client={client} setClient={setClient} />} />
             <Route path='/search' element={<Search client={client} setClient={setClient} />} />
             <Route path='/broj' element={<Broj brojNaBaranje={brojNaBaranje} setBrojNaBaranje={setBrojNaBaranje} />} />

@@ -1,4 +1,7 @@
-.navbar-element {
-    border: 1px solid black;
-    padding: 5px;
+.navbar-element-s {
+    border-radius: 5px;
+    font-size: 25px;
+    cursor: pointer;
+    background: rgb(246, 246, 246);
+    padding: 10px;
 }

@@ -249,6 +249,7 @@ const Search = ({ client, setClient }) => {
                 handleResultClick={handleResultClick}
                 deleteMessage={deleteMessage}
                 dltItem={dltItem}
+                setClient={setClient}
             />
 
             {enterIdMsg && <p>{enterIdMsg}</p>}

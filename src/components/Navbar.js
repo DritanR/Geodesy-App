@@ -10,6 +10,7 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
     const [addMessage, setAddMessage] = useState(null)
     const [addedMessage, setAddedMessage] = useState(null)
     const [showModal, setShowModal] = useState(false)
+    const [showAddClient, setShowAddClient] = useState(false)
 
     useEffect(() => {
         if (addedMessage || addMessage) {
@@ -43,7 +44,7 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
         setAddMessage(null)
     }
 
-    function resetClient () {
+    function resetClient() {
         setClient([])
     }
 
@@ -91,43 +92,61 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
         }
     };
 
+    function addClientTricks() {
+        setShowAddClient(true)
+        setShowModal(false)
+    }
+
     return (
         <div className='navbar'>
 
-            <div className='navbar-container-left'>
-                <button className='log-out-button' onClick={handleLogOut}>Log Out</button>
-                <Link to='/search'><button className='search-button' onClick={resetClient}><NavbarElement name='Search' /></button></Link>
-                <Link to ='/all'><button className='all-button' onClick={fetchClientData}>All</button></Link>
-            </div>
+            {showAddClient ? (
+                <div className='navbar-right'>
+                    <div className='add-clients-container'>
+                        <div className="add-clients-pages">
+                            <Link to='/broj-na-baranje'><NavbarElement name="Id" /></Link>
+                            <Link to='/broj'><NavbarElement name="Broj Na Baranje" /></Link>
+                            <Link to='/ime-i-prezime'><NavbarElement name="Ime I Prezime" /></Link>
+                            <Link to='/adresa'><NavbarElement name="Adresa" /></Link>
+                            <Link to='/telefonski-broj'><NavbarElement name="Telefonski Broj" /></Link>
+                            <Link to='/vid-na-usloga'><NavbarElement name="Vid na usloga" /></Link>
+                            <Link to='/ko'><NavbarElement name="KO" /></Link>
+                            <Link to='/kp'><NavbarElement name="KP" /></Link>
+                            <Link to='/data'><NavbarElement name="Data" /></Link>
+                        </div>
 
-            <div className='navbar-container-center'>
-                <div className='add-clients-container'>
-                    <Link to='/broj-na-baranje'><NavbarElement name="Id" /></Link>
-                    <Link to='/broj'><NavbarElement name="Broj Na Baranje" /></Link>
-                    <Link to='/ime-i-prezime'><NavbarElement name="Ime I Prezime" /></Link>
-                    <Link to='/adresa'><NavbarElement name="Adresa" /></Link>
-                    <Link to='/telefonski-broj'><NavbarElement name="Telefonski Broj" /></Link>
-                    <Link to='/vid-na-usloga'><NavbarElement name="Vid na usloga" /></Link>
-                    <Link to='/ko'><NavbarElement name="KO" /></Link>
-                    <Link to='/kp'><NavbarElement name="KP" /></Link>
-                    <Link to='/data'><NavbarElement name="Data" /></Link>
-                </div>
-                <p className='add-message'>{addMessage}</p>
-                <p className='added-message'>{addedMessage}</p>
-                {showModal && (
-                    <div className='modal'>
-                        <p>Are you sure you want to add a client?</p>
-                        <button className='yes' onClick={handleAddClient}>Yes</button>
-                        <button className='no' onClick={() => setShowModal(false)}>No</button>
+                        <div className="add-clients-buttons">
+                            <button className='reset-data' onClick={resetData}>Reset Data</button>
+                            <Link to='/'><button onClick={() => setShowAddClient(false)}>Close the client</button></Link>
+                            <button className='add-to-database' onClick={() => setShowModal(true)}>Save the client</button>
+                        </div>
                     </div>
-                )}
-            </div>
 
-            <div className='navbar-container-right'>
-                <button className='reset-data' onClick={resetData}>Reset Data</button>
-                <button className='add-to-database' onClick={() => setShowModal(true)}>Add Client</button>
-            </div>
+                    <div className="add-clients-errors">
+                        <p className='add-message'>{addMessage}</p>
+                        <p className='added-message'>{addedMessage}</p>
+                    </div>
+                    {showModal && (
+                        <div className='modal'>
+                            <p>Are you sure you want to add a client?</p>
+                            <button className='yes' onClick={handleAddClient}>Yes</button>
+                            <button className='no' onClick={() => setShowModal(false)}>No</button>
+                        </div>
+                    )}
+                </div>) : (
+                <div className="navbar-container">
+                    <div className="navbar-left">
+                        <button className='button-navbar navbar-element' onClick={handleLogOut}>Log Out</button>
+                        <Link to='/'><button className="navbar-element">Home</button></Link>
+                    </div>
 
+                    <div className="navbar-center">
+                        <Link to='/search'><button className='button-navbar navbar-element' onClick={resetClient}>Search</button></Link>
+                        <Link to='/all'><button className='button-navbar navbar-element' onClick={fetchClientData}>All Clients</button></Link>
+                    </div>
+                    <button className="navbar-element button-navbar" onClick={addClientTricks}>Add Client</button>
+                </div>
+            )}
         </div>
     );
 }
