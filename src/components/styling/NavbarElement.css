@@ -5,3 +5,19 @@
     background: rgb(246, 246, 246);
     padding: 10px;
 }
+
+@media (max-width: 1400px) {
+    .navbar-element-s {
+        font-size: 21px;
+    }
+}
+@media (max-width: 1200px) {
+    .navbar-element-s {
+        font-size: 19px;
+    }
+}
+@media (max-width: 600px) {
+    .navbar-element-s {
+        font-size: 14px;
+    }
+}

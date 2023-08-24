@@ -4,6 +4,7 @@ import './styling/Navbar.css'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
+import { HiOutlineMenu } from "react-icons/hi";
 
 const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, date, setDate, telefonskiBroj, setTelefonskiBroj, adresa, setAdresa, vidNaUsloga, setVidNaUsloga, ko, setKo, brojNaBaranje, setBrojNaBaranje, kp, setKp, id, client, setClient }) => {
 
@@ -11,6 +12,7 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
     const [addedMessage, setAddedMessage] = useState(null)
     const [showModal, setShowModal] = useState(false)
     const [showAddClient, setShowAddClient] = useState(false)
+    const [showButtons, setShowButtons] = useState(false)
 
     useEffect(() => {
         if (addedMessage || addMessage) {
@@ -97,12 +99,19 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
         setShowModal(false)
     }
 
+    function buttons () {
+        if (showButtons) {
+            setShowButtons(false)
+        } else {
+            setShowButtons(true)
+        }
+    }
+
     return (
         <div className='navbar'>
 
             {showAddClient ? (
                 <div className='navbar-right'>
-                    <div className='add-clients-container'>
                         <div className="add-clients-pages">
                             <Link to='/broj-na-baranje'><NavbarElement name="Id" /></Link>
                             <Link to='/broj'><NavbarElement name="Broj Na Baranje" /></Link>
@@ -116,25 +125,28 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
                         </div>
 
                         <div className="add-clients-buttons">
-                            <button className='reset-data' onClick={resetData}>Reset Data</button>
-                            <Link to='/'><button onClick={() => setShowAddClient(false)}>Close the client</button></Link>
-                            <button className='add-to-database' onClick={() => setShowModal(true)}>Save the client</button>
+                            <button className='clients-button' onClick={resetData}>Reset Data</button>
+                            <Link to='/'><button className='clients-button' onClick={() => setShowAddClient(false)}>Close the client</button></Link>
+                            <button className='clients-button' onClick={() => setShowModal(true)}>Save the client</button>
                         </div>
-                    </div>
 
                     <div className="add-clients-errors">
                         <p className='add-message'>{addMessage}</p>
                         <p className='added-message'>{addedMessage}</p>
                     </div>
+                    
                     {showModal && (
                         <div className='modal'>
-                            <p>Are you sure you want to add a client?</p>
+                            <p className='modal-text'>Are you sure you want to add a client?</p>
+                            <div className='modal-buttons'>
                             <button className='yes' onClick={handleAddClient}>Yes</button>
                             <button className='no' onClick={() => setShowModal(false)}>No</button>
+                            </div>
                         </div>
                     )}
                 </div>) : (
-                <div className="navbar-container">
+                    <>
+                <div className="navbar-container nvbc-show">
                     <div className="navbar-left">
                         <button className='button-navbar navbar-element' onClick={handleLogOut}>Log Out</button>
                         <Link to='/'><button className="navbar-element">Home</button></Link>
@@ -146,6 +158,21 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
                     </div>
                     <button className="navbar-element button-navbar" onClick={addClientTricks}>Add Client</button>
                 </div>
+                
+                <button className='menu' onClick={buttons}><HiOutlineMenu /></button>
+                {showButtons &&<div className="navbar-container nvbc-hide">
+                    <div className="navbar-left">
+                        <button className='button-navbar navbar-element' onClick={handleLogOut}>Log Out</button>
+                        <Link to='/'><button className="navbar-element">Home</button></Link>
+                    </div>
+
+                    <div className="navbar-center">
+                        <Link to='/search'><button className='button-navbar navbar-element' onClick={resetClient}>Search</button></Link>
+                        <Link to='/all'><button className='button-navbar navbar-element' onClick={fetchClientData}>All Clients</button></Link>
+                    </div>
+                    <button className="navbar-element button-navbar" onClick={addClientTricks}>Add Client</button>
+                </div>}
+                </>
             )}
         </div>
     );
