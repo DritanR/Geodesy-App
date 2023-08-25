@@ -50,7 +50,6 @@ const SearchBar = ({ idQueryList, onSearch, searchQuery, setSearchQuery, searchC
             <button className='search-button' onClick={searchClient}>Search</button>
             <button onClick={() => setClient([])}>Back</button>
             {deleteMessage}
-            {dltItem}
         </div>
     );
 };

@@ -131,8 +131,8 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
                         </div>
 
                     <div className="add-clients-errors">
-                        <p className='add-message'>{addMessage}</p>
-                        <p className='added-message'>{addedMessage}</p>
+                        <p className='add-message error'>{addMessage}</p>
+                        <p className='added-message msg'>{addedMessage}</p>
                     </div>
                     
                     {showModal && (

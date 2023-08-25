@@ -79,6 +79,14 @@
 .menu {
     display: none;
 }
+.error {
+    color: #D8000C;
+    font-size: 23px;
+}
+.msg {
+    color: rgb(21, 216, 21);
+    font-size: 23px;
+}
 
 @media(max-width: 1400px) {
     .navbar-element {
@@ -89,6 +97,15 @@
     }
     .clients-button {
         font-size: 19px;
+    }
+    .error, .msg {
+        font-size: 21px;
+    }
+    .modal-text {
+        font-size: 22px;
+    }
+    .yes, .no {
+        font-size: 14px;
     }
 }
 
@@ -119,6 +136,9 @@
         padding: 0;
         padding: 10px;
     }
+    .error, .msg {
+        font-size: 19px;
+    }
 
     .menu {
         background: none;
@@ -138,6 +158,12 @@
     }
     .navbar-right {
         gap: 30px;
+    }
+    .modal-text {
+        font-size: 20px;
+    }
+    .yes, .no {
+        font-size: 12px;
     }
 }
 
@@ -159,5 +185,14 @@
     }
     .clients-button {
         font-size: 12px;
+    }
+    .error, .msg {
+        font-size: 14px;
+    }
+    .modal-text {
+        font-size: 16px;
+    }
+    .yes, .no {
+        font-size: 10px;
     }
 }
