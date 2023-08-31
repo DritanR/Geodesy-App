@@ -14,8 +14,10 @@ const NameLastName = ({imeIPrezime, setImeIPrezime}) => {
 
     return (
         <div className='name-lastname'>
-            <div className='nl-container'>
-                <input className='nl-name-input nl-input'
+            <h2 className='name-lastname-title'>Adding Name and Last Name:</h2>
+            <div className='name-lastname-container'>
+                <input
+                    className="name-lastname-input"
                     type='text'
                     value={imeIPrezime}
                     onChange={handleName}

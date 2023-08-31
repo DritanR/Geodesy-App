@@ -31,9 +31,11 @@ const Lock = ({ lockPass, lockValue, setLockValue }) => {
     return (
         <div className='lock'>
 
-            <div className='lock-container'>
+            <div className='lock-container-up'>
                 <img className='lock-img' src={LOGO} />
                 <h1 className='lock-pin-text'>PIN</h1>
+                </div>
+                <div className='lock-container-down'>
                 <input className='lock-input'
                     type='password'
                     value={lockValue}
@@ -42,8 +44,8 @@ const Lock = ({ lockPass, lockValue, setLockValue }) => {
                     onContextMenu={handleValue}
                     ref={inputRef}
                 />
+                </div>
                 {showIncorrectText && <p className='lock-incorrect-text'>Incorrect password.</p>}
-            </div>
         </div>
     );
 }

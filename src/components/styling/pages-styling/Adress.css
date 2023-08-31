@@ -1,39 +1,39 @@
-.broj-na-baranje {
+.adress {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 50px 0 20px 0;
 }
-.broj-na-baranje-title {
+.adress-title {
     font-size: 30px;
 }
-.broj-na-baranje-input {
+.adress-input {
     font-size: 20px;
     border-radius: 5px;
     padding: 5px;
 }
 
 @media (max-width: 1400px) {
-    .broj-na-baranje-title {
+    .adress-title {
          font-size: 25px;
      }
-     .broj-na-baranje-input {
+     .adress-input {
          font-size: 18px;
      }
  }
  @media (max-width: 1200px) {
-    .broj-na-baranje-title {
+    .adress-title {
          font-size: 20px;
      }
-     .broj-na-baranje-input {
+     .adress-input {
          font-size: 16px;
      }
  }
  @media (max-width: 600px) {
-    .broj-na-baranje-title {
+    .adress-title {
          font-size: 20px;
      }
-     .broj-na-baranje-input {
+     .adress-input {
          font-size: 14px;
      }
  }

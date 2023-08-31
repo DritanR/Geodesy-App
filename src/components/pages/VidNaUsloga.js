@@ -9,7 +9,9 @@ const VidNaUsloga = ({ vidNaUsloga, setVidNaUsloga }) => {
     return (
         <div className="vid-na-usloga">
             <div className="vid-na-usloga-container">
+                <h2 className='vid-na-usloga-title'>Adding Vid na usloga:</h2>
                 <input
+                    className='vid-na-usloga-input'
                     type="text"
                     placeholder="Vid Na Usloga"
                     value={vidNaUsloga}

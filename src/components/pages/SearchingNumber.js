@@ -18,10 +18,12 @@ const SearchingNumber = ({id, setId}) => {
 
     return (
         <div className="searching-number">
-            <div className='search-number-container'>
+            <h2 className='searching-number-title'>Adding Id:</h2>
+            <div className='searching-number-container'>
                 <input
+                className='searching-number-input'
                 type='number'
-                placeholder='id'
+                placeholder='ID'
                 value={id}
                 onChange={handleId}
                 onKeyDown={handleKeyDown}

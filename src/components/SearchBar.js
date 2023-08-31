@@ -1,56 +1,86 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './styling/SearchBar.css'
+import { Link } from 'react-router-dom';
+import { IoMdArrowRoundBack } from 'react-icons/io'
 
-const SearchBar = ({ idQueryList, onSearch, searchQuery, setSearchQuery, searchClient, idQuery, setIdQuery, showSearchResults, setShowSearchResults, searchResults, handleResultClick, deleteMessage, dltItem, setClient }) => {
+const SearchBar = ({ searchQuery, setSearchQuery, idQueryList, setIdQueryList, searchResults, setSearchResults, searchClient, idQuery, setIdQuery, enterIdMsg, setEnterIdMsg, error, setError, setClient }) => {
+    useEffect(() => {
+        if (searchQuery.trim() === '') {
+            setSearchResults([]);
+            setIdQueryList([]);
+            return;
+        }
 
-    const handleInputChange = (e) => {
-        const query = e.target.value;
-        setSearchQuery(query);
-        onSearch(query);
-        setShowSearchResults(true)
-    };
+        const fetchSearchResults = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5000/search/${searchQuery}`);
+                setSearchResults(response.data.data);
+                setIdQueryList(response.data.ids);
+            } catch (error) {
+                console.error('Error fetching search results:', error);
+                setSearchResults([]);
+                setIdQueryList([]);
+            }
+        };
 
-    if (searchQuery.length < 1) {
-        setShowSearchResults(false)
+        fetchSearchResults();
+    }, [searchQuery]);
+
+    function handleNameClick(query) {
+        setSearchQuery(query)
+    }
+
+    function handleBack () {
+        setError(null)
+        setEnterIdMsg(null)
+        setClient([])
     }
 
     return (
-        <div>
-            <div>
-            <input
-                type="text"
-                placeholder="Search by name"
-                value={searchQuery}
-                onChange={handleInputChange}
-            />
-
-            <ul className='search-results'>
-                {showSearchResults && searchResults.map((result) => (
-                    <li key={result._id} onClick={() => handleResultClick(result.name)}>
-                        {result.name}
-                    </li>
-                ))}
-            </ul>
-
-            <input
-                type="number"
-                placeholder="Search by ID"
-                value={idQuery}
-                onChange={(e) => setIdQuery(e.target.value)}
-                list='id-options'
-            />
-
-            <datalist id="id-options">
-                {idQueryList.map((id) => (
-                    <option key={id} value={id} />
-                ))}
-            </datalist>
+        <>
+        <h2 className='search-bar-title'>Search for client:</h2>
+        <div className='search-bar'>
+            <div className='search-bar-container'>
+                <div className='search-bar-right'>
+                    <div className='sb-right-1'>
+                <input
+                className='sb-right-1-input'
+                    type="text"
+                    placeholder="Search by name"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                </div>
+                {searchResults.length > 0  && ( 
+                <div className='sb-right-2'>
+                {searchQuery.trim() !== '' && (
+                    <ul className='sb-right-2-container'>
+                        {searchResults.map((result) => (
+                            <li className='sb-right-2-element' key={result._id} onClick={() => handleNameClick(result.imeIPrezime)}>{result.imeIPrezime}</li>
+                        ))}
+                    </ul>
+                )}
+                </div>
+                )}
+                </div>
+                <div className='sb-left'>
+                <select className='sb-left-container' onChange={(e) => setIdQuery(e.target.value)}>
+                    <option className='sb-left-element' value={idQuery}>ID</option>
+                    {idQueryList.map((id) => (
+                        <option className='sb-left-element' key={id} value={id}>{id}</option>
+                    ))}
+                </select>
+                </div>
             </div>
-
-            <button className='search-button' onClick={searchClient}>Search</button>
-            <button onClick={() => setClient([])}>Back</button>
-            {deleteMessage}
+            <div className='search-bar-buttons'>
+            <button className='search-bar-button' onClick={searchClient}>Search</button>
+            <Link to='/search'><button className='search-bar-button-2' onClick={handleBack}><IoMdArrowRoundBack className='back-icon' /></button></Link>
+            </div>
         </div>
+        <p className='search-txt'>{enterIdMsg && enterIdMsg}</p>
+        <p className='search-txt'>{error && error}</p>
+        </>
     );
 };
 

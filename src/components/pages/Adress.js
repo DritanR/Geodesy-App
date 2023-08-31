@@ -1,3 +1,5 @@
+import '../styling/pages-styling/Adress.css'
+
 const Adress = ({adresa, setAdresa}) => {
 
     function handleCity (event) {
@@ -6,8 +8,9 @@ const Adress = ({adresa, setAdresa}) => {
 
     return (
         <div className="adress">
+            <h2 className='adress-title'>Adding adress: </h2>
             <div className="adress-container">
-                <input className="city-adress"
+                <input className="adress-input"
                     type="text"
                     placeholder="Adresa"
                     value={adresa}

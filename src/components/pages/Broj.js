@@ -7,13 +7,15 @@ const Broj = ({brojNaBaranje, setBrojNaBaranje}) => {
     }
 
     return (
-        <div className="broj">
-            <div className="broj-container">
+        <div className="broj-na-baranje">
+            <h2 className='broj-na-baranje-title'>Adding broj na baranje:</h2>
+            <div className="broj-na-baranje-container">
                 <input
+                className='broj-na-baranje-input'
                 type="text"
                 value={brojNaBaranje}
                 onChange={handleBroj}
-                placeholder="Broj"
+                placeholder="Broj na baranje"
                 />
             </div>
         </div>

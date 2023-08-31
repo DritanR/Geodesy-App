@@ -1,0 +1,39 @@
+.vid-na-usloga {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px 0 20px 0;
+}
+.vid-na-usloga-title {
+    font-size: 30px;
+}
+.vid-na-usloga-input {
+    font-size: 20px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+@media (max-width: 1400px) {
+    .vid-na-usloga-title {
+        font-size: 25px;
+    }
+    .vid-na-usloga-input {
+        font-size: 18px;
+    }
+}
+@media (max-width: 1200px) {
+    .vid-na-usloga-title {
+        font-size: 20px;
+    }
+    .vid-na-usloga-input {
+        font-size: 16px;
+    }
+}
+@media (max-width: 600px) {
+    .vid-na-usloga-title {
+        font-size: 20px;
+    }
+    .vid-na-usloga-input {
+        font-size: 14px;
+    }
+}

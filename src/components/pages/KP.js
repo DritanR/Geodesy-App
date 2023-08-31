@@ -8,6 +8,7 @@ const KP = ({kp, setKp}) => {
 
     return (
         <div className="kp">
+            <h2 className='kp-title'>Adding kp:</h2>
             <div className="kp-container">
                 <input className="kp-input"
                 type="text"

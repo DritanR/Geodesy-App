@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import { HiOutlineMenu } from "react-icons/hi";
 
-const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, date, setDate, telefonskiBroj, setTelefonskiBroj, adresa, setAdresa, vidNaUsloga, setVidNaUsloga, ko, setKo, brojNaBaranje, setBrojNaBaranje, kp, setKp, id, client, setClient }) => {
+const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, date, setDate, telefonskiBroj, setTelefonskiBroj, adresa, setAdresa, vidNaUsloga, setVidNaUsloga, ko, setKo, brojNaBaranje, setBrojNaBaranje, kp, setKp, id, client, setClient, clientFiles, setClientFiles }) => {
 
     const [addMessage, setAddMessage] = useState(null)
     const [addedMessage, setAddedMessage] = useState(null)
@@ -89,6 +89,7 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
             resetData()
             const response = await axios.get('http://localhost:5000/get/client');
             setClient(response.data);
+            
         } catch (error) {
             console.error('Error fetching client data:', error);
         }
@@ -97,6 +98,11 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
     function addClientTricks() {
         setShowAddClient(true)
         setShowModal(false)
+    }
+
+    function closeClient () {
+        setShowAddClient(false)
+        resetData()
     }
 
     function buttons () {
@@ -126,7 +132,7 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
 
                         <div className="add-clients-buttons">
                             <button className='clients-button' onClick={resetData}>Reset Data</button>
-                            <Link to='/'><button className='clients-button' onClick={() => setShowAddClient(false)}>Close the client</button></Link>
+                            <Link to='/'><button className='clients-button' onClick={closeClient}>Close the client</button></Link>
                             <button className='clients-button' onClick={() => setShowModal(true)}>Save the client</button>
                         </div>
 
@@ -156,7 +162,7 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
                         <Link to='/search'><button className='button-navbar navbar-element' onClick={resetClient}>Search</button></Link>
                         <Link to='/all'><button className='button-navbar navbar-element' onClick={fetchClientData}>All Clients</button></Link>
                     </div>
-                    <button className="navbar-element button-navbar" onClick={addClientTricks}>Add Client</button>
+                    <Link to='/broj-na-baranje'><button className="navbar-element button-navbar" onClick={addClientTricks}>Add Client</button></Link>
                 </div>
                 
                 <button className='menu' onClick={buttons}><HiOutlineMenu /></button>
@@ -170,7 +176,7 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
                         <Link to='/search'><button className='button-navbar navbar-element' onClick={resetClient}>Search</button></Link>
                         <Link to='/all'><button className='button-navbar navbar-element' onClick={fetchClientData}>All Clients</button></Link>
                     </div>
-                    <button className="navbar-element button-navbar" onClick={addClientTricks}>Add Client</button>
+                    <button className="navbar-element button-navbar" onClick={addClientTricks}><Link to='/broj-na-baranje'>Add Client</Link></button>
                 </div>}
                 </>
             )}

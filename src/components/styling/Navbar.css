@@ -111,7 +111,7 @@
 
 @media(max-width: 1200px) {
     .navbar-element {
-        font-size: 16px;
+        font-size: 18px;
     }
 
     .nvbc-show {
@@ -173,7 +173,7 @@
     }
 
     .navbar-element {
-        font-size: 11px;
+        font-size: 14px;
     }
 
     .navbar-left,

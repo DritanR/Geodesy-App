@@ -1,0 +1,39 @@
+.searching-number {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px 0 20px 0;
+}
+.searching-number-title {
+    font-size: 30px;
+}
+.searching-number-input {
+    font-size: 20px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+@media (max-width: 1400px) {
+    .searching-number-title {
+         font-size: 25px;
+     }
+     .searching-number-input {
+         font-size: 18px;
+     }
+ }
+ @media (max-width: 1200px) {
+    .searching-number-title {
+         font-size: 20px;
+     }
+     .searching-number-input {
+         font-size: 16px;
+     }
+ }
+ @media (max-width: 600px) {
+    .searching-number-title {
+         font-size: 20px;
+     }
+     .searching-number-input {
+         font-size: 14px;
+     }
+ }

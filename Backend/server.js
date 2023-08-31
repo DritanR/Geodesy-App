@@ -54,11 +54,11 @@ app.post('/add/client', async (req, res) => {
     }
 })
 
-app.get('/search/:name', async (req, res) => {
+app.get('/search/:query', async (req, res) => {
     try {
-        const name = req.params.name.toLowerCase();
+        const query = req.params.query.toLowerCase();
         const data = await NameModel.find({
-            name: { $regex: name, $options: 'i' }
+            imeIPrezime: { $regex: query, $options: 'i' }
         });
 
         const ids = data.map(item => item.id);
@@ -72,13 +72,13 @@ app.get('/search/:name', async (req, res) => {
 
 
 app.get('/get/client', async (req, res) => {
-    const { name, id } = req.query;
+    const { imeIPrezime, id } = req.query;
 
     try {
         let query = {}
 
-        if (name) {
-            query.name = { $regex: new RegExp(name, 'i') }
+        if (imeIPrezime) {
+            query.imeIPrezime = { $regex: new RegExp(imeIPrezime, 'i') }
         }
 
         if (id) {

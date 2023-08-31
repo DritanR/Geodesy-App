@@ -5,7 +5,7 @@ import '../styling/pages-styling/Search.css';
 import { BsFillTrashFill, BsThreeDots, BsTrash } from 'react-icons/bs'
 
 
-const Search = ({ client, setClient }) => {
+const Search = ({ client, setClient, clientFiles, setClientFiles }) => {
     const [showSearchResults, setShowSearchResults] = useState(true);
     const [error, setError] = useState(null);
     const [searchResults, setSearchResults] = useState([]);
@@ -33,6 +33,11 @@ const Search = ({ client, setClient }) => {
     const [dltItem, setDltItem] = useState(null)
     const [showFileDeleteConfirmation, setShowFileDeleteConfirmation] = useState(null);
     const [fileMessage, setFileMessage] = useState(null)
+    const [confirmDeleteClientId, setConfirmDeleteClientId] = useState(null);
+    const [confirmDeleteItem, setConfirmDeleteItem] = useState({
+        clientId: null,
+        field: null
+    });
 
     useEffect(() => {
         if (deleteMessage || dltItem || fileMessage) {
@@ -46,27 +51,14 @@ const Search = ({ client, setClient }) => {
                 clearTimeout(timeout);
             };
         }
-    }, [deleteMessage, dltItem, fileMessage]);
-
-
-    const handleSearch = async (query) => {
-        try {
-            const response = await axios.get(`http://localhost:5000/search/${query}`);
-            setSearchResults(response.data.data);
-            setIdQueryList(response.data.ids);
-        } catch (error) {
-            console.error('Error fetching search results:', error);
-            setSearchResults([]);
-            setIdQueryList([]);
-        }
-    };
+    }, [deleteMessage, dltItem, fileMessage]);    
 
     const searchClient = async () => {
         if (idQuery !== '') {
             try {
                 const response = await axios.get(`http://localhost:5000/get/client`, {
                     params: {
-                        name: searchQuery.toLowerCase(),
+                        imeIPrezime: searchQuery.toLowerCase(),
                         id: idQuery
                     }
                 });
@@ -174,7 +166,6 @@ const Search = ({ client, setClient }) => {
     const clearValue = (clientId, field) => {
         axios.post(`http://localhost:5000/clearValue/${clientId}`, { field: field })
             .then(response => {
-                console.log(`Value for field ${field} cleared successfully for client ${clientId}`);
                 setShowClearConfirmation(null)
                 setDltItem('Item deleted successfully!')
                 setClient(prevClients => {
@@ -211,8 +202,6 @@ const Search = ({ client, setClient }) => {
         }
     };
 
-    const [clientFiles, setClientFiles] = useState([]);
-
     const fetchClientFiles = async (clientId) => {
         try {
             const response = await axios.get(`http://localhost:5000/get/files/${clientId}`);
@@ -232,6 +221,7 @@ const Search = ({ client, setClient }) => {
             console.error('Error deleting file:', error);
         }
     };
+    
 
 
     return (
@@ -239,22 +229,25 @@ const Search = ({ client, setClient }) => {
             <SearchBar
                 idQueryList={idQueryList}
                 searchClient={searchClient}
-                onSearch={handleSearch}
                 setShowSearchResults={setShowSearchResults}
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
                 idQuery={idQuery}
                 setIdQuery={setIdQuery}
+                setIdQueryList={setIdQueryList}
                 showSearchResults={showSearchResults}
                 searchResults={searchResults}
+                setSearchResults={setSearchResults}
                 handleResultClick={handleResultClick}
                 deleteMessage={deleteMessage}
                 dltItem={dltItem}
                 setClient={setClient}
+                enterIdMsg={enterIdMsg}
+                setEnterIdMsg={setEnterIdMsg}
+                error={error}
+                setError={setError}
             />
-
-            {enterIdMsg && <p>{enterIdMsg}</p>}
-            {error && <p>{error}</p>}
+            
             {client.length > 0 &&
                 <div className='client-container'>
                     {client.map((person) => (
@@ -368,15 +361,21 @@ const Search = ({ client, setClient }) => {
                                     <div className='client-container-data'>
                                         <div className='client-data-buttons'>
                                             <button className='client-top-buttons' onClick={() => handleEditClient(person._id)}><BsThreeDots /></button>
-                                            <button className='client-top-buttons' onClick={() => setDltClient(true)}><BsTrash /></button>
+                                            <button className='client-top-buttons' onClick={() => setConfirmDeleteClientId(person._id)}><BsTrash /></button>
                                         </div>
-                                        {dltClient && <div className='delete-client-item-cont'>
-                                            <p className='dltit-text'>Are you sure you want to delete this client ?</p>
-                                            <div className='dltit-buttons'>
-                                                <button className='yes-dltit' onClick={() => deleteClient(person._id)}>Yes</button>
-                                                <button className='no-dltit' onClick={() => setDltClient(false)}>No</button>
+                                        {confirmDeleteClientId === person._id && (
+                                            <div className='delete-client-item-cont'>
+                                                <p className='dltit-text'>Are you sure you want to delete this client?</p>
+                                                <div className='dltit-buttons'>
+                                                    <button className='yes-dltit' onClick={() => {
+                                                        deleteClient(person._id)
+                                                        setConfirmDeleteClientId(null);
+                                                    }}>Yes</button>
+                                                    <button className='no-dltit' onClick={() => setConfirmDeleteClientId(null)}>No</button>
+                                                </div>
                                             </div>
-                                        </div>}
+                                        )}
+
                                         <div className='client-cont-nb'>
                                             <p className='client-key'>Id: </p>
                                             <p className='client-value'>{person.id}</p>
@@ -386,17 +385,30 @@ const Search = ({ client, setClient }) => {
                                                 <div className='client-cont-flex'>
                                                     <p className='client-key'>Broj Na Baranje: </p>
                                                     <p className='client-value'>{person.brojNaBaranje}</p>
-                                                    <button className='client-bt' onClick={() => setShowClearConfirmation('brojNaBaranje')}><BsFillTrashFill /></button>
+                                                    <button
+                                                        className='client-bt'
+                                                        onClick={() => setConfirmDeleteItem({
+                                                            clientId: person._id,
+                                                            field: 'brojNaBaranje' // Replace 'brojNaBaranje' with the actual field you're dealing with
+                                                        })}
+                                                    >
+                                                        <BsFillTrashFill />
+                                                    </button>
                                                 </div>
-                                                {showClearConfirmation === 'brojNaBaranje' && (
+                                                {confirmDeleteItem.clientId === person._id && confirmDeleteItem.field === 'brojNaBaranje' && (
                                                     <div className='delete-client-item-cont'>
                                                         <p className='dltit-text'>Are you sure you want to delete this item?</p>
                                                         <div className='dltit-buttons'>
-                                                            <button className='yes-dltit' onClick={() => clearValue(person._id, 'brojNaBaranje')}>Yes</button>
-                                                            <button className='no-dltit' onClick={() => setShowClearConfirmation(null)}>No</button>
+                                                            <button className='yes-dltit' onClick={() => {
+                                                                clearValue(person._id, 'brojNaBaranje');
+                                                                setConfirmDeleteItem({ clientId: null, field: null }); // Clear the state after deletion
+                                                            }}>Yes</button>
+                                                            <button className='no-dltit' onClick={() => setConfirmDeleteItem({ clientId: null, field: null })}>No</button>
+
                                                         </div>
                                                     </div>
                                                 )}
+
                                             </div>
                                         )}
                                         <div className='client-cont-nb'>
@@ -408,14 +420,27 @@ const Search = ({ client, setClient }) => {
                                                 <div className='client-cont-flex'>
                                                     <p className='client-key'>Adresa: </p>
                                                     <p className='client-value'>{person.adresa}</p>
-                                                    <button className='client-bt' onClick={() => setShowClearConfirmation('adresa')}><BsFillTrashFill /></button>
+                                                    <button
+                                                        className='client-bt'
+                                                        onClick={() => setConfirmDeleteItem({
+                                                            clientId: person._id,
+                                                            field: 'adresa' // Replace 'brojNaBaranje' with the actual field you're dealing with
+                                                        })}
+                                                    >
+                                                        <BsFillTrashFill />
+                                                    </button>
+
                                                 </div>
-                                                {showClearConfirmation === 'adresa' && (
+                                                {confirmDeleteItem.clientId === person._id && confirmDeleteItem.field === 'adresa' && (
                                                     <div className='delete-client-item-cont'>
                                                         <p className='dltit-text'>Are you sure you want to delete this item?</p>
                                                         <div className='dltit-buttons'>
-                                                            <button className='yes-dltit' onClick={() => clearValue(person._id, 'adresa')}>Yes</button>
-                                                            <button className='no-dltit' onClick={() => setShowClearConfirmation(null)}>No</button>
+                                                            <button className='yes-dltit' onClick={() => {
+                                                                clearValue(person._id, 'adresa');
+                                                                setConfirmDeleteItem({ clientId: null, field: null }); // Clear the state after deletion
+                                                            }}>Yes</button>
+                                                            <button className='no-dltit' onClick={() => setConfirmDeleteItem({ clientId: null, field: null })}>No</button>
+
                                                         </div>
                                                     </div>
                                                 )}
@@ -426,14 +451,27 @@ const Search = ({ client, setClient }) => {
                                                 <div className='client-cont-flex'>
                                                     <p className='client-key'>Telefonski Broj: </p>
                                                     <p className='client-value'>{person.telefonskiBroj}</p>
-                                                    <button className='client-bt' onClick={() => setShowClearConfirmation('telefonskiBroj')}><BsFillTrashFill /></button>
+                                                    <button
+                                                        className='client-bt'
+                                                        onClick={() => setConfirmDeleteItem({
+                                                            clientId: person._id,
+                                                            field: 'telefonskiBroj' // Replace 'brojNaBaranje' with the actual field you're dealing with
+                                                        })}
+                                                    >
+                                                        <BsFillTrashFill />
+                                                    </button>
+
                                                 </div>
-                                                {showClearConfirmation === 'telefonskiBroj' && (
+                                                {confirmDeleteItem.clientId === person._id && confirmDeleteItem.field === 'telefonskiBroj' && (
                                                     <div className='delete-client-item-cont'>
                                                         <p className='dltit-text'>Are you sure you want to delete this item?</p>
                                                         <div className='dltit-buttons'>
-                                                            <button className='yes-dltit' onClick={() => clearValue(person._id, 'telefonskiBroj')}>Yes</button>
-                                                            <button className='no-dltit' onClick={() => setShowClearConfirmation(null)}>No</button>
+                                                            <button className='yes-dltit' onClick={() => {
+                                                                clearValue(person._id, 'telefonskiBroj');
+                                                                setConfirmDeleteItem({ clientId: null, field: null }); // Clear the state after deletion
+                                                            }}>Yes</button>
+                                                            <button className='no-dltit' onClick={() => setConfirmDeleteItem({ clientId: null, field: null })}>No</button>
+
                                                         </div>
                                                     </div>
                                                 )}
@@ -444,14 +482,27 @@ const Search = ({ client, setClient }) => {
                                                 <div className='client-cont-flex'>
                                                     <p className='client-key'>Vid Na Usloga: </p>
                                                     <p className='client-value'>{person.vidNaUsloga}</p>
-                                                    <button className='client-bt' onClick={() => setShowClearConfirmation('vidNaUsloga')}><BsFillTrashFill /></button>
+                                                    <button
+                                                        className='client-bt'
+                                                        onClick={() => setConfirmDeleteItem({
+                                                            clientId: person._id,
+                                                            field: 'vidNaUsloga' // Replace 'brojNaBaranje' with the actual field you're dealing with
+                                                        })}
+                                                    >
+                                                        <BsFillTrashFill />
+                                                    </button>
+
                                                 </div>
-                                                {showClearConfirmation === 'vidNaUsloga' && (
+                                                {confirmDeleteItem.clientId === person._id && confirmDeleteItem.field === 'vidNaUsloga' && (
                                                     <div className='delete-client-item-cont'>
                                                         <p className='dltit-text'>Are you sure you want to delete this item?</p>
                                                         <div className='dltit-buttons'>
-                                                            <button className='yes-dltit' onClick={() => clearValue(person._id, 'vidNaUsloga')}>Yes</button>
-                                                            <button className='no-dltit' onClick={() => setShowClearConfirmation(null)}>No</button>
+                                                            <button className='yes-dltit' onClick={() => {
+                                                                clearValue(person._id, 'vidNaUsloga');
+                                                                setConfirmDeleteItem({ clientId: null, field: null }); // Clear the state after deletion
+                                                            }}>Yes</button>
+                                                            <button className='no-dltit' onClick={() => setConfirmDeleteItem({ clientId: null, field: null })}>No</button>
+
                                                         </div>
                                                     </div>
                                                 )}
@@ -462,14 +513,26 @@ const Search = ({ client, setClient }) => {
                                                 <div className='client-cont-flex'>
                                                     <p className='client-key'>KO: </p>
                                                     <p className='client-value'>{person.ko}</p>
-                                                    <button className='client-bt' onClick={() => setShowClearConfirmation('ko')}><BsFillTrashFill /></button>
+                                                    <button
+                                                        className='client-bt'
+                                                        onClick={() => setConfirmDeleteItem({
+                                                            clientId: person._id,
+                                                            field: 'ko' // Replace 'brojNaBaranje' with the actual field you're dealing with
+                                                        })}
+                                                    >
+                                                        <BsFillTrashFill />
+                                                    </button>
                                                 </div>
-                                                {showClearConfirmation === 'ko' && (
+                                                {confirmDeleteItem.clientId === person._id && confirmDeleteItem.field === 'ko' && (
                                                     <div className='delete-client-item-cont'>
                                                         <p className='dltit-text'>Are you sure you want to delete this item?</p>
                                                         <div className='dltit-buttons'>
-                                                            <button className='yes-dltit' onClick={() => clearValue(person._id, 'ko')}>Yes</button>
-                                                            <button className='no-dltit' onClick={() => setShowClearConfirmation(null)}>No</button>
+                                                            <button className='yes-dltit' onClick={() => {
+                                                                clearValue(person._id, 'ko');
+                                                                setConfirmDeleteItem({ clientId: null, field: null }); // Clear the state after deletion
+                                                            }}>Yes</button>
+                                                            <button className='no-dltit' onClick={() => setConfirmDeleteItem({ clientId: null, field: null })}>No</button>
+
                                                         </div>
                                                     </div>
                                                 )}
@@ -480,14 +543,26 @@ const Search = ({ client, setClient }) => {
                                                 <div className='client-cont-flex'>
                                                     <p className='client-key'>KP: </p>
                                                     <p className='client-value'>{person.kp}</p>
-                                                    <button className='client-bt' onClick={() => setShowClearConfirmation('kp')}><BsFillTrashFill /></button>
+                                                    <button
+                                                        className='client-bt'
+                                                        onClick={() => setConfirmDeleteItem({
+                                                            clientId: person._id,
+                                                            field: 'kp' // Replace 'brojNaBaranje' with the actual field you're dealing with
+                                                        })}
+                                                    >
+                                                        <BsFillTrashFill />
+                                                    </button>
                                                 </div>
-                                                {showClearConfirmation === 'kp' && (
+                                                {confirmDeleteItem.clientId === person._id && confirmDeleteItem.field === 'kp' && (
                                                     <div className='delete-client-item-cont'>
                                                         <p className='dltit-text'>Are you sure you want to delete this item?</p>
                                                         <div className='dltit-buttons'>
-                                                            <button className='yes-dltit' onClick={() => clearValue(person._id, 'kp')}>Yes</button>
-                                                            <button className='no-dltit' onClick={() => setShowClearConfirmation(null)}>No</button>
+                                                            <button className='yes-dltit' onClick={() => {
+                                                                clearValue(person._id, 'kp');
+                                                                setConfirmDeleteItem({ clientId: null, field: null }); // Clear the state after deletion
+                                                            }}>Yes</button>
+                                                            <button className='no-dltit' onClick={() => setConfirmDeleteItem({ clientId: null, field: null })}>No</button>
+
                                                         </div>
                                                     </div>
                                                 )}
@@ -498,14 +573,26 @@ const Search = ({ client, setClient }) => {
                                                 <div className='client-cont-flex'>
                                                     <p className='client-key'>Data: </p>
                                                     <p className='client-value'>{person.date}</p>
-                                                    <button className='client-bt' onClick={() => setShowClearConfirmation('date')}><BsFillTrashFill /></button>
+                                                    <button
+                                                        className='client-bt'
+                                                        onClick={() => setConfirmDeleteItem({
+                                                            clientId: person._id,
+                                                            field: 'date' // Replace 'brojNaBaranje' with the actual field you're dealing with
+                                                        })}
+                                                    >
+                                                        <BsFillTrashFill />
+                                                    </button>
                                                 </div>
-                                                {showClearConfirmation === 'date' && (
+                                                {confirmDeleteItem.clientId === person._id && confirmDeleteItem.field === 'date' && (
                                                     <div className='delete-client-item-cont'>
                                                         <p className='dltit-text'>Are you sure you want to delete this item?</p>
                                                         <div className='dltit-buttons'>
-                                                            <button className='yes-dltit' onClick={() => clearValue(person._id, 'date')}>Yes</button>
-                                                            <button className='no dltit' onClick={() => setShowClearConfirmation(null)}>No</button>
+                                                            <button className='yes-dltit' onClick={() => {
+                                                                clearValue(person._id, 'date');
+                                                                setConfirmDeleteItem({ clientId: null, field: null }); // Clear the state after deletion
+                                                            }}>Yes</button>
+                                                            <button className='no-dltit' onClick={() => setConfirmDeleteItem({ clientId: null, field: null })}>No</button>
+
                                                         </div>
                                                     </div>
                                                 )}

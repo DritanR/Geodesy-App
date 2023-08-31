@@ -1,0 +1,39 @@
+.phone-number {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px 0 20px 0;
+}
+.phone-number-title {
+    font-size: 30px;
+}
+.phone-number-input {
+    font-size: 20px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+@media (max-width: 1400px) {
+   .phone-number-title {
+        font-size: 25px;
+    }
+    .phone-number-input {
+        font-size: 18px;
+    }
+}
+@media (max-width: 1200px) {
+    .phone-number-title {
+        font-size: 20px;
+    }
+    .phone-number-input {
+        font-size: 16px;
+    }
+}
+@media (max-width: 600px) {
+    .phone-number-title {
+        font-size: 20px;
+    }
+    .phone-number-input {
+        font-size: 14px;
+    }
+}

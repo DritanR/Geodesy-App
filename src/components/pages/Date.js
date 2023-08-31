@@ -7,8 +7,10 @@ const Date = ({date, setDate}) => {
     }
     return (
         <div className='data'>
+            <h2 className='data-title'>Adding data:</h2>
             <div className='data-container'>
                 <input 
+                className='data-input'
                 type='date' 
                 value={date}
                 onChange={handleData}

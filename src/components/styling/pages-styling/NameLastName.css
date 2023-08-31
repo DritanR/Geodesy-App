@@ -1,0 +1,39 @@
+.name-lastname {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px 0 20px 0;
+}
+.name-lastname-title {
+    font-size: 30px;
+}
+.name-lastname-input {
+    font-size: 20px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+@media (max-width: 1400px) {
+    .name-lastname-title {
+         font-size: 25px;
+     }
+     .name-lastname-input {
+         font-size: 18px;
+     }
+ }
+ @media (max-width: 1200px) {
+    .name-lastname-title {
+         font-size: 20px;
+     }
+     .name-lastname-input {
+         font-size: 16px;
+     }
+ }
+ @media (max-width: 600px) {
+    .name-lastname-title {
+         font-size: 20px;
+     }
+     .name-lastname-input {
+         font-size: 14px;
+     }
+ }

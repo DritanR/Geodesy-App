@@ -32,6 +32,7 @@ function App() {
   const [vidNaUsloga, setVidNaUsloga] = useState('')
   const [ko, setKo] = useState('')
   const [kp, setKp] = useState('')
+  const [clientFiles, setClientFiles] = useState([]);
 
   return (
     <>
@@ -39,11 +40,11 @@ function App() {
         <Lock lockPass={lockPass} lockValue={lockValue} setLockValue={setLockValue} />
       ) : (
         <>
-          <Navbar setLogOut={setLogOut} setLockValue={setLockValue} imeIPrezime={imeIPrezime} setImeIPrezime={setImeIPrezime} setId={setId} date={date} setDate={setDate} telefonskiBroj={telefonskiBroj} setTelefonskiBroj={setTelefonskiBroj} adresa={adresa} setAdresa={setAdresa} vidNaUsloga={vidNaUsloga} setVidNaUsloga={setVidNaUsloga} ko={ko} setKo={setKo} brojNaBaranje={brojNaBaranje} setBrojNaBaranje={setBrojNaBaranje} kp={kp} setKp={setKp} id={id} client={client} setClient={setClient} />
+          <Navbar setLogOut={setLogOut} setLockValue={setLockValue} imeIPrezime={imeIPrezime} setImeIPrezime={setImeIPrezime} setId={setId} date={date} setDate={setDate} telefonskiBroj={telefonskiBroj} setTelefonskiBroj={setTelefonskiBroj} adresa={adresa} setAdresa={setAdresa} vidNaUsloga={vidNaUsloga} setVidNaUsloga={setVidNaUsloga} ko={ko} setKo={setKo} brojNaBaranje={brojNaBaranje} setBrojNaBaranje={setBrojNaBaranje} kp={kp} setKp={setKp} id={id} client={client} setClient={setClient} clientFiles={clientFiles} setClientFiles={setClientFiles} />
           <Routes>
             <Route index element={<Home />} />
-            <Route path='/all' element={<All client={client} setClient={setClient} />} />
-            <Route path='/search' element={<Search client={client} setClient={setClient} />} />
+            <Route path='/all' element={<All client={client} setClient={setClient} clientFiles={clientFiles} setClientFiles={setClientFiles} />} />
+            <Route path='/search' element={<Search client={client} setClient={setClient} clientFiles={clientFiles} setClientFiles={setClientFiles} />} />
             <Route path='/broj' element={<Broj brojNaBaranje={brojNaBaranje} setBrojNaBaranje={setBrojNaBaranje} />} />
             <Route path='/broj-na-baranje' element={<SearchingNumber id={id} setId={setId} />} />
             <Route path='/telefonski-broj' element={<PhoneNumber telefonskiBroj={telefonskiBroj} setTelefonskiBroj={setTelefonskiBroj} />} />

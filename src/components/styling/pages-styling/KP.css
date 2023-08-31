@@ -1,0 +1,38 @@
+.kp {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px 0 20px 0;
+}
+.kp-title {
+    font-size: 30px;
+}
+.kp-input {
+    font-size: 20px;
+    border-radius: 5px;
+    padding: 5px;
+}
+@media (max-width: 1400px) {
+    .kp-title {
+        font-size: 25px;
+    }
+    .kp-input {
+        font-size: 18px;
+    }
+}
+@media (max-width: 1200px) {
+    .kp-title {
+        font-size: 20px;
+    }
+    .kp-input {
+        font-size: 16px;
+    }
+}
+@media (max-width: 600px) {
+    .kp-title {
+        font-size: 20px;
+    }
+    .kp-input {
+        font-size: 14px;
+    }
+}

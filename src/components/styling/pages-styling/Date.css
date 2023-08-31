@@ -1,0 +1,39 @@
+.data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px 0 20px 0;
+}
+.data-title {
+    font-size: 30px;
+}
+.data-input {
+    font-size: 20px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+@media (max-width: 1400px) {
+    .data-title {
+        font-size: 25px;
+    }
+    .data-input {
+        font-size: 18px;
+    }
+}
+@media (max-width: 1200px) {
+    .data-title {
+        font-size: 20px;
+    }
+    .data-input {
+        font-size: 16px;
+    }
+}
+@media (max-width: 600px) {
+    .data-title {
+        font-size: 20px;
+    }
+    .data-input {
+        font-size: 14px;
+    }
+}

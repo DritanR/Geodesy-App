@@ -2,8 +2,8 @@ import '../styling/pages-styling/Home.css';
 
 function Home() {
     return (
-        <div>
-            <h1>Welcome Home!</h1>
+        <div className='home'>
+            <h1 className='home-title'>Geodesy App</h1>
         </div>
     )
 }

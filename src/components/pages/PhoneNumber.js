@@ -9,8 +9,10 @@ const PhoneNumber = ({telefonskiBroj, setTelefonskiBroj}) => {
 
     return (
         <div className="phone-number">
+            <h2 className='phone-number-title'>Adding a Phone number:</h2>
             <div className='phone-number-container'>
                 <input 
+                className='phone-number-input'
                 type='number'
                 value={telefonskiBroj}
                 onChange={handlePhoneNumber}
