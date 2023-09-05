@@ -46,10 +46,6 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
         setAddMessage(null)
     }
 
-    function resetClient() {
-        setClient([])
-    }
-
     const handleAddClient = async () => {
         if ((id === '' || id === undefined) && imeIPrezime === '') {
             setAddMessage('Please fill the empty ID and Name field to add a client!')
@@ -159,8 +155,8 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
                     </div>
 
                     <div className="navbar-center">
-                        <Link to='/search'><button className='button-navbar navbar-element' onClick={resetClient}>Search</button></Link>
-                        <Link to='/all'><button className='button-navbar navbar-element' onClick={fetchClientData}>All Clients</button></Link>
+                        <Link to='/search'><button className='button-navbar navbar-element' onClick={() => setClient([])}>Search</button></Link>
+                        <Link to='/all'><button className='button-navbar navbar-element all-button' onClick={fetchClientData}>All Clients</button></Link>
                     </div>
                     <Link to='/broj-na-baranje'><button className="navbar-element button-navbar" onClick={addClientTricks}>Add Client</button></Link>
                 </div>
@@ -173,8 +169,8 @@ const Navbar = ({ setLogOut, setLockValue, imeIPrezime, setImeIPrezime, setId, d
                     </div>
 
                     <div className="navbar-center">
-                        <Link to='/search'><button className='button-navbar navbar-element' onClick={resetClient}>Search</button></Link>
-                        <Link to='/all'><button className='button-navbar navbar-element' onClick={fetchClientData}>All Clients</button></Link>
+                        <Link to='/search'><button className='button-navbar navbar-element' onClick={() => setClient([])}>Search</button></Link>
+                        <Link to='/all'><button className='button-navbar navbar-element all-button' onClick={fetchClientData}>All Clients</button></Link>
                     </div>
                     <button className="navbar-element button-navbar" onClick={addClientTricks}><Link to='/broj-na-baranje'>Add Client</Link></button>
                 </div>}

@@ -87,6 +87,9 @@
     color: rgb(21, 216, 21);
     font-size: 23px;
 }
+.all-button {
+    display: none;
+}
 
 @media(max-width: 1400px) {
     .navbar-element {
@@ -121,6 +124,7 @@
     .nvbc-hide,
     .menu {
         display: block;
+        flex-direction: column;
     }
 
     .navbar-left,
